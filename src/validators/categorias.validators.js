@@ -1,4 +1,4 @@
-const { query } = require('express-validator');
+const { query, param } = require('express-validator');
 
 // Filtros opcionales para listado de categorías
 const SORT_BY = ['id', 'nombre'];
@@ -15,4 +15,11 @@ exports.listFilters = [
   // Paginación
   query('page').optional({ checkFalsy: true }).isInt({ min: 1 }).toInt(),
   query('pageSize').optional({ checkFalsy: true }).isInt({ min: 1, max: 200 }).toInt()
+];
+
+// Validaciones específicas para /categorias/:id/productos
+exports.productsByCategoryValidators = [
+  param('id').isInt({ min: 1 }).toInt(),
+  query('page').optional({ checkFalsy: true }).isInt({ min: 1 }).toInt(),
+  query('pageSize').optional({ checkFalsy: true }).isInt({ min: 1, max: 100 }).toInt()
 ];

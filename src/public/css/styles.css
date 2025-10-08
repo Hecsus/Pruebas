@@ -23,6 +23,11 @@
 .card-click{ text-decoration:none; color:inherit; display:block; }
 .card-click:hover{ transform:translateY(-1px); }
 
+/* Tarjetas clicables en listados relacionados: mismas curvas/sombras del panel */
+.relation-card{ border:none; border-radius:var(--radius-md); box-shadow:var(--shadow-1); }
+.relation-card__cta{ width:100%; }
+.relation-card .badge{ font-size:.75rem; }
+
 /* Tablas legibles con badges de stock accesibles */
 .table td, .table th{ vertical-align:middle; }
 .icon-inline{ font-size:1rem; vertical-align:middle; }
@@ -38,5 +43,16 @@
 .options-grid .form-check{display:flex;align-items:center;}
 .input-group .btn{min-width:2.5rem;}
 
-/* Impresión del QR en formato A6 sin elementos de navegación */
-@media print{ body{ margin:0 } .qr-print{ width: 105mm; height: 148mm; /* A6 */ padding:12mm; } .no-print{ display:none !important; } }
+/* Impresión del QR en formato A6 y tablas limpias: ocultamos navegación/botones */
+@media print{
+  body{ margin:0; }
+  .qr-print{ width:105mm; height:148mm; /* A6 */ padding:12mm; }
+  .no-print{ display:none !important; }
+  nav, .navbar-spacer, footer{ display:none !important; }
+  main.container{ width:100%; max-width:none; }
+  table{ font-size:12px; }
+}
+
+/* Elementos solo visibles al imprimir (ej. títulos especiales) */
+.print-only{ display:none; }
+@media print{ .print-only{ display:block !important; } }

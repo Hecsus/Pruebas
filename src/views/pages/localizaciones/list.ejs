@@ -35,19 +35,36 @@
     </div>
   </form>
 </div>
-<table class="table table-striped">
-  <thead><tr><th>ID</th><th>Nombre</th><th>Acciones</th></tr></thead>
-  <tbody>
-    <% localizaciones.forEach(l => { %>
-      <tr>
-        <td><%= l.id %></td>
-        <td><%= l.nombre %></td>
-        <td>
-          <a href="/localizaciones/<%= l.id %>/editar" class="btn btn-sm btn-warning"><i class='bx bx-edit'></i></a>
-          <a href="/localizaciones/<%= l.id %>/eliminar" class="btn btn-sm btn-danger btn-delete"><i class='bx bx-trash'></i></a>
-        </td>
-      </tr>
-    <% }) %>
-  </tbody>
-</table>
+
+<% if (!localizaciones.length) { %>
+  <div class="alert alert-info">No se encontraron localizaciones con los filtros aplicados.</div>
+<% } %>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+  <% localizaciones.forEach(l => { %>
+    <div class="col">
+      <article class="card relation-card h-100">
+        <div class="card-body d-flex flex-column">
+          <h2 class="h5 mb-1"><%= l.nombre %></h2>
+          <p class="text-muted small mb-3">ID interno: <%= l.id %></p>
+          <a
+            href="/localizaciones/<%= l.id %>/productos"
+            class="btn btn-outline-primary relation-card__cta mt-auto"
+            aria-label="Ver productos de la localización <%= l.nombre %>"
+          >
+            <i class='bx bx-list-ul' aria-hidden="true"></i>
+            Ver productos
+            <% if (typeof l.productos_count !== 'undefined') { %>
+              <span class="badge bg-secondary ms-2"><%= l.productos_count %></span>
+            <% } %>
+          </a>
+        </div>
+        <div class="card-footer d-flex gap-2 no-print">
+          <a href="/localizaciones/<%= l.id %>/editar" class="btn btn-sm btn-warning" aria-label="Editar <%= l.nombre %>"><i class='bx bx-edit'></i></a>
+          <a href="/localizaciones/<%= l.id %>/eliminar" class="btn btn-sm btn-danger btn-delete" aria-label="Eliminar <%= l.nombre %>"><i class='bx bx-trash'></i></a>
+        </div>
+      </article>
+    </div>
+  <% }) %>
+</div>
 <!-- [checklist] permiso correcto, validaciones y sin código muerto -->

@@ -35,19 +35,36 @@
     </div>
   </form>
 </div>
-<table class="table table-striped">
-  <thead><tr><th>ID</th><th>Nombre</th><th>Acciones</th></tr></thead>
-  <tbody>
-    <% categorias.forEach(c => { %>
-      <tr>
-        <td><%= c.id %></td>
-        <td><%= c.nombre %></td>
-        <td>
-          <a href="/categorias/<%= c.id %>/editar" class="btn btn-sm btn-warning"><i class='bx bx-edit'></i></a>
-          <a href="/categorias/<%= c.id %>/eliminar" class="btn btn-sm btn-danger btn-delete"><i class='bx bx-trash'></i></a>
-        </td>
-      </tr>
-    <% }) %>
-  </tbody>
-</table>
+
+<% if (!categorias.length) { %>
+  <div class="alert alert-info">No se encontraron categorías con los filtros aplicados.</div>
+<% } %>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+  <% categorias.forEach(c => { %>
+    <div class="col">
+      <article class="card relation-card h-100">
+        <div class="card-body d-flex flex-column">
+          <h2 class="h5 mb-1"><%= c.nombre %></h2>
+          <p class="text-muted small mb-3">ID interno: <%= c.id %></p>
+          <a
+            href="/categorias/<%= c.id %>/productos"
+            class="btn btn-outline-primary relation-card__cta mt-auto"
+            aria-label="Ver productos de la categoría <%= c.nombre %>"
+          >
+            <i class='bx bx-list-ul' aria-hidden="true"></i>
+            Ver productos
+            <% if (typeof c.productos_count !== 'undefined') { %>
+              <span class="badge bg-secondary ms-2"><%= c.productos_count %></span>
+            <% } %>
+          </a>
+        </div>
+        <div class="card-footer d-flex gap-2 no-print">
+          <a href="/categorias/<%= c.id %>/editar" class="btn btn-sm btn-warning" aria-label="Editar <%= c.nombre %>"><i class='bx bx-edit'></i></a>
+          <a href="/categorias/<%= c.id %>/eliminar" class="btn btn-sm btn-danger btn-delete" aria-label="Eliminar <%= c.nombre %>"><i class='bx bx-trash'></i></a>
+        </div>
+      </article>
+    </div>
+  <% }) %>
+</div>
 <!-- [checklist] permiso correcto, validaciones y sin código muerto -->

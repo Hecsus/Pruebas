@@ -161,6 +161,19 @@ DB_NAME=inventario
 - Búsquedas con filtros y ordenación; operadores `=` por defecto si no se elige otro (popup informativo una vez por campo).
 - Badges que comparan **stock** vs **stock mínimo** para resaltar faltantes.
 
+## Listados por relación (categoría/proveedor/localización)
+- Las vistas de categorías, proveedores y localizaciones muestran cada elemento como tarjeta Bootstrap con enlace directo al listado de productos asociado.
+- Nuevas rutas protegidas: `GET /categorias/:id/productos`, `GET /proveedores/:id/productos`, `GET /localizaciones/:id/productos`.
+- Paginación disponible mediante `?page=` y `?pageSize=` (hasta 100). Los parámetros inválidos devuelven aviso sin romper la vista.
+- Cada listado reutiliza una tabla parcial con columnas: ID, Nombre, Precio, Stock, Stock mínimo, Proveedores y Localización.
+- Botón **Imprimir** en la cabecera ejecuta `window.print()` y aplica estilos de impresión que ocultan navegación y acciones.
+
+### Cómo imprimir listados relacionados
+1. Accede a la tarjeta de la categoría, proveedor o localización deseada.
+2. En la vista resultante pulsa **Imprimir** (icono de impresora). El navegador abrirá la vista previa con la tabla simplificada.
+3. Confirma la impresión o genera un PDF según necesites. Las columnas de acciones desaparecen automáticamente.
+
+
 ## Seguridad aplicada
 - Variables de entorno cargadas con **dotenv** y verificadas al inicio.
 - Contraseñas protegidas con **bcryptjs** (hash y `compare`).
@@ -264,6 +277,7 @@ Las páginas de detalle incluyen `returnTo` para regresar a la vista previa.
 
 ## Troubleshooting
 - **DB access denied**: revisa credenciales y privilegios MySQL.
+- **Listados sin productos**: asegúrate de que existan relaciones en `producto_categoria`, `producto_proveedor` y que los productos tengan `localizacion_id` válido.
 - **Módulos EJS/layouts no encontrados**: ejecuta `npm install`.
 - **Vistas no encontradas**: confirma rutas en `res.render` y estructura de `views`.
 - **CJS/ESM**: el proyecto usa CommonJS; evita `import/export` sin transpilar.
@@ -272,6 +286,12 @@ Las páginas de detalle incluyen `returnTo` para regresar a la vista previa.
 - **Errores al importar seeds**: asegúrate de que la base existe y de tener permisos.
 
 ## CHANGELOG
+## [2025-09-12 10:30] – Listados por relación + impresión
+- Tarjetas clicables en categorías, proveedores y localizaciones con contador de productos.
+- Nuevas rutas `/categorias/:id/productos`, `/proveedores/:id/productos` y `/localizaciones/:id/productos` con validación y paginación.
+- Vista unificada con tabla parcial y botón **Imprimir** más estilos específicos para impresión.
+- Manejo de errores y retornos seguros cuando los parámetros son inválidos o la relación no existe.
+
 ## [2025-09-11 16:30] – Reordenado panel e icono de proveedores restaurado
 - Panel resumen alineado con el orden del navbar colocando la tarjeta de Bajo stock en segunda posición.
 - Icono de Proveedores restituido con Boxicons (camión) manteniendo accesibilidad y estilos existentes.

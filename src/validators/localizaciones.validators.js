@@ -1,4 +1,4 @@
-const { query } = require('express-validator');
+const { query, param } = require('express-validator');
 
 // Filtros opcionales para localizaciones
 const SORT_BY = ['id', 'nombre'];
@@ -11,4 +11,10 @@ exports.listFilters = [
   query('sortDir').optional({ checkFalsy: true }).isIn(SORT_DIR),
   query('page').optional({ checkFalsy: true }).isInt({ min: 1 }).toInt(),
   query('pageSize').optional({ checkFalsy: true }).isInt({ min: 1, max: 200 }).toInt()
+];
+
+exports.productsByLocationValidators = [
+  param('id').isInt({ min: 1 }).toInt(),
+  query('page').optional({ checkFalsy: true }).isInt({ min: 1 }).toInt(),
+  query('pageSize').optional({ checkFalsy: true }).isInt({ min: 1, max: 100 }).toInt()
 ];
