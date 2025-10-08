@@ -1,0 +1,57 @@
+<%#
+  Tabla reutilizable para mostrar productos vinculados a una relación
+  (categoría, proveedor o localización). Se espera recibir:
+  - items: array de productos con id, nombre, precio, stock, stock_minimo,
+           proveedores (array) y localizacion (string).
+  - currentUrl: URL actual para construir returnTo en acciones.
+  - returnTo: ruta saneada a la que volver tras gestionar un producto.
+%>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Precio</th>
+      <th>Stock</th>
+      <th>Stock mín.</th>
+      <th>Proveedores</th>
+      <th>Localización</th>
+      <th class="no-print">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (!items.length) { %>
+      <tr>
+        <td colspan="8" class="text-center">No hay productos vinculados a este elemento.</td>
+      </tr>
+    <% } %>
+    <% items.forEach(producto => { %>
+      <% const lowStock = Number(producto.stock) <= Number(producto.stock_minimo); %>
+      <tr class="<%= lowStock ? 'table-warning' : '' %>">
+        <td><%= producto.id %></td>
+        <td><%= producto.nombre %></td>
+        <td><%= producto.precio %></td>
+        <td>
+          <span><%= producto.stock %></span>
+          <% if (lowStock) { %>
+            <i class="bx bx-error text-danger ms-1" aria-label="Bajo stock" title="Bajo stock"></i>
+          <% } %>
+        </td>
+        <td><%= producto.stock_minimo %></td>
+        <td>
+          <% const proveedores = (producto.proveedores || []).map(p => p.nombre).join(', '); %>
+          <%= proveedores || '—' %>
+        </td>
+        <td><%= producto.localizacion || '—' %></td>
+        <td class="no-print">
+          <a href="/productos/<%= producto.id %>?returnTo=<%= encodeURIComponent(returnTo || currentUrl) %>" class="btn btn-sm btn-primary" aria-label="Ver producto <%= producto.nombre %>"><i class='bx bx-show'></i></a>
+          <a href="/productos/<%= producto.id %>/editar?returnTo=<%= encodeURIComponent(returnTo || currentUrl) %>" class="btn btn-sm btn-warning" aria-label="Editar producto <%= producto.nombre %>"><i class='bx bx-edit'></i></a>
+          <form action="/productos/<%= producto.id %>/eliminar" method="POST" class="d-inline">
+            <input type="hidden" name="returnTo" value="<%= returnTo || currentUrl %>">
+            <button type="submit" class="btn btn-sm btn-danger btn-delete" aria-label="Eliminar producto <%= producto.nombre %>"><i class='bx bx-trash'></i></button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

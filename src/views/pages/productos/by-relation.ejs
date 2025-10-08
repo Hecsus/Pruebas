@@ -1,0 +1,54 @@
+<%#
+  Vista genérica para mostrar listados de productos filtrados por
+  categoría, proveedor o localización. Recibe:
+  - title: título completo de la página.
+  - relation: objeto con tipo, nombre, id y total.
+  - items: array de productos.
+  - page, totalPages, pageSize: datos de paginación.
+  - basePath: ruta base para la paginación.
+  - query: querystring original para conservar parámetros.
+  - returnTo: ruta segura para volver a la vista previa.
+%>
+<section class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+  <h1 class="mb-0"><%= title %></h1>
+  <div class="d-flex gap-2">
+    <a href="<%= returnTo %>" class="btn btn-outline-primary no-print">
+      <i class='bx bx-arrow-back' aria-hidden="true"></i> Volver
+    </a>
+    <button type="button" class="btn btn-outline-secondary no-print" onclick="window.print()">
+      <i class='bx bx-printer' aria-hidden="true"></i> Imprimir
+    </button>
+  </div>
+</section>
+
+<% if (relation) { %>
+  <p class="text-muted">
+    <%# Información contextual para quien imprime la tabla %>
+    Listado generado para la <strong><%= relation.tipo %></strong> "<%= relation.nombre %>".
+    Productos encontrados: <%= relation.total %>.
+  </p>
+<% } %>
+
+<% if (errors && errors.length) { %>
+  <div class="alert alert-warning">
+    <h2 class="h6 mb-2">Revisa los parámetros recibidos:</h2>
+    <ul class="mb-0">
+      <% errors.forEach(error => { %>
+        <li><strong><%= error.path || 'parámetro' %>:</strong> <%= error.msg %></li>
+      <% }) %>
+    </ul>
+  </div>
+<% } %>
+
+<%- include('../../partials/productos/product-list-table', { items, currentUrl: request.originalUrl, returnTo }) %>
+
+<% const params = new URLSearchParams(query); %>
+<nav class="no-print" aria-label="Paginación de productos relacionados">
+  <ul class="pagination">
+    <% for (let i = 1; i <= totalPages; i++) { params.set('page', i); %>
+      <li class="page-item <%= i === page ? 'active' : '' %>">
+        <a class="page-link" href="<%= basePath %>?<%= params.toString() %>"><%= i %></a>
+      </li>
+    <% } %>
+  </ul>
+</nav>

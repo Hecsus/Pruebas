@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/categorias.controller');
-// Validaciones de filtros opcionales
-const { listFilters } = require('../validators/categorias.validators');
+// Validaciones de filtros opcionales y listados por relación
+const { listFilters, productsByCategoryValidators } = require('../validators/categorias.validators');
 const requireAuth = require('../middlewares/requireAuth'); // Exige usuario en sesión
 
 // Listado con filtros combinables
 router.get('/', requireAuth, listFilters, controller.list);
+// Productos asociados a una categoría concreta
+router.get('/:id/productos', requireAuth, productsByCategoryValidators, controller.productsByCategory);
 // Formulario para crear
 router.get('/nuevo', requireAuth, controller.form);
 // Guardar categoría nueva

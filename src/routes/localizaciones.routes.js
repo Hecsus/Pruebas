@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/localizaciones.controller');
-// Validaciones de filtros
-const { listFilters } = require('../validators/localizaciones.validators');
+// Validaciones de filtros y listados por localización
+const { listFilters, productsByLocationValidators } = require('../validators/localizaciones.validators');
 const requireAuth = require('../middlewares/requireAuth'); // Exige login para operar
 
 // Listado con filtros
 router.get('/', requireAuth, listFilters, controller.list);
+// Productos ubicados en una localización concreta
+router.get('/:id/productos', requireAuth, productsByLocationValidators, controller.productsByLocation);
 // Formulario de creación
 router.get('/nuevo', requireAuth, controller.form);
 // Guardar localización nueva
