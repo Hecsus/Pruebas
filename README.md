@@ -272,6 +272,10 @@ Las páginas de detalle incluyen `returnTo` para regresar a la vista previa.
 - **Errores al importar seeds**: asegúrate de que la base existe y de tener permisos.
 
 ## CHANGELOG
+## [2025-09-11 16:30] – Reordenado panel e icono de proveedores restaurado
+- Panel resumen alineado con el orden del navbar colocando la tarjeta de Bajo stock en segunda posición.
+- Icono de Proveedores restituido con Boxicons (camión) manteniendo accesibilidad y estilos existentes.
+
 ## [2025-09-11 14:45] – Defaults seguros y filtros de usuario efectivos
 - Fix TDZ en layout.ejs usando `_hideChrome` (sin redeclarar).
 - Defaults seguros en `res.locals` (hideChrome, viewClass, activePath).
