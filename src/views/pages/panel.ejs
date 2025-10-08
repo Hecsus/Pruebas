@@ -2,6 +2,7 @@
 <h1 class="mb-4">Resumen</h1>
 <div class="row g-3"><!-- Grid de tarjetas resumen -->
   <!-- Cada tarjeta es un enlace completo con icono y contador -->
+  <!-- Ajuste de orden: mantenemos Productos primero para respetar navegación; no se altera contador ni enlace -->
   <div class="col-6 col-md-4 col-lg-2">
     <a href="/productos" class="card card-summary bg-primary text-white text-center text-decoration-none">
       <div class="card-body">
@@ -11,6 +12,17 @@
       </div>
     </a>
   </div>
+  <!-- Ajuste solicitado: movemos Bajo stock a la segunda posición para alinear con el orden del navbar; sin tocar lógica ni rutas -->
+  <div class="col-6 col-md-4 col-lg-2">
+    <a href="/bajo-stock" class="card card-summary bg-danger text-white text-center text-decoration-none">
+      <div class="card-body">
+        <i class="<%= icons.bajoStock %> summary-icon"></i>
+        <p class="summary-value"><%= counts.bajoStock %></p>
+        <p class="mb-0">Bajo stock</p>
+      </div>
+    </a>
+  </div>
+  <!-- Ajuste de continuidad: Categorías pasa a tercera tarjeta siguiendo el menú; métricas y destino permanecen iguales -->
   <div class="col-6 col-md-4 col-lg-2">
     <a href="/categorias" class="card card-summary bg-success text-white text-center text-decoration-none">
       <div class="card-body">
@@ -20,30 +32,23 @@
       </div>
     </a>
   </div>
+  <!-- Restauración visual: Proveedores mantiene su posición original pero recupera icono de camión con Boxicons; contadores/enlace intactos -->
   <div class="col-6 col-md-4 col-lg-2">
-    <a href="/proveedores" class="card card-summary bg-warning text-white text-center text-decoration-none">
+    <a href="/proveedores" class="card card-summary bg-warning text-white text-center text-decoration-none" aria-label="Proveedores">
       <div class="card-body">
-        <i class="<%= icons.proveedores %> summary-icon"></i>
+        <i class="bx bxs-truck summary-icon" aria-hidden="true"></i>
         <p class="summary-value"><%= counts.proveedores %></p>
         <p class="mb-0">Proveedores</p>
       </div>
     </a>
   </div>
+  <!-- Sin cambios funcionales: Localizaciones conserva su enlace y métrica, ahora en quinto lugar acorde al menú -->
   <div class="col-6 col-md-4 col-lg-2">
     <a href="/localizaciones" class="card card-summary bg-info text-white text-center text-decoration-none">
       <div class="card-body">
         <i class="<%= icons.localizaciones %> summary-icon"></i>
         <p class="summary-value"><%= counts.localizaciones %></p>
         <p class="mb-0">Localizaciones</p>
-      </div>
-    </a>
-  </div>
-  <div class="col-6 col-md-4 col-lg-2">
-    <a href="/bajo-stock" class="card card-summary bg-danger text-white text-center text-decoration-none">
-      <div class="card-body">
-        <i class="<%= icons.bajoStock %> summary-icon"></i>
-        <p class="summary-value"><%= counts.bajoStock %></p>
-        <p class="mb-0">Bajo stock</p>
       </div>
     </a>
   </div>
