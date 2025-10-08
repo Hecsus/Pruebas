@@ -1,0 +1,87 @@
+<!-- Encabezado de la vista: título y acceso rápido a alta de usuario -->
+<h1>Usuarios</h1>
+<a href="/usuarios/nuevo" class="btn btn-success mb-3">Nuevo</a>
+<% if (message) { %>
+  <div class="alert alert-<%= message.type %>"><%= message.text %></div>
+<% } %>
+<!-- Panel de filtros colapsable: evita ruido visual pero mantiene búsqueda avanzada a mano -->
+<button class="btn btn-outline-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#searchBox">Buscar</button>
+<div id="searchBox" class="collapse <%= (Object.keys(query||{}).length ? 'show' : '') %>">
+  <% if (errors && errors.length) { %>
+    <div class="alert alert-warning">
+      <strong>Revisa los filtros:</strong>
+      <ul class="mb-0">
+        <% errors.forEach(e => { %><li><%= e.path %>: <%= e.msg %></li><% }) %>
+      </ul>
+    </div>
+  <% } %>
+  <form class="row g-2 mb-3" method="get"><!-- Formulario GET para componer la query string -->
+    <div class="col-md-2">
+      <input type="number" name="id" class="form-control" placeholder="ID" value="<%= query.id || '' %>">
+    </div>
+    <div class="col-md-2">
+      <input type="text" name="nombre" class="form-control" placeholder="Nombre" value="<%= query.nombre || '' %>">
+    </div>
+    <div class="col-md-2">
+      <input type="text" name="email" class="form-control" placeholder="Email" value="<%= query.email || '' %>">
+    </div>
+    <div class="col-md-2">
+      <input type="text" name="telefono" class="form-control" placeholder="Teléfono" value="<%= query.telefono || '' %>">
+    </div>
+    <div class="col-md-2">
+      <select name="role" class="form-select"><!-- Filtro de rol simplificado con valores canónicos -->
+        <option value="">Rol</option><!-- Opción neutra para no filtrar -->
+        <option value="admin" <%= query.role === 'admin' ? 'selected' : '' %>>Admin</option><!-- Solo admins -->
+        <option value="operador" <%= query.role === 'operador' ? 'selected' : '' %>>Operador</option><!-- Solo operadores -->
+      </select>
+    </div>
+    <div class="col-md-2">
+      <select name="sortBy" class="form-select">
+        <option value="id" <%= (query.sortBy || 'id')==='id'?'selected':'' %>>Ordenar ID</option>
+        <option value="nombre" <%= query.sortBy==='nombre'?'selected':'' %>>Nombre</option>
+        <option value="email" <%= query.sortBy==='email'?'selected':'' %>>Email</option>
+        <option value="telefono" <%= query.sortBy==='telefono'?'selected':'' %>>Teléfono</option>
+        <option value="rol" <%= query.sortBy==='rol'?'selected':'' %>>Rol</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <select name="sortDir" class="form-select">
+        <option value="asc" <%= (query.sortDir || 'asc')==='asc'?'selected':'' %>>Asc</option>
+        <option value="desc" <%= (query.sortDir || 'asc')==='desc'?'selected':'' %>>Desc</option>
+      </select>
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary">Aplicar</button>
+      <a href="/usuarios" class="btn btn-outline-secondary">Limpiar</a>
+    </div>
+  </form>
+</div>
+<!-- Tabla de resultados: muestra usuarios con acciones de mantenimiento -->
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Email</th>
+      <th>Teléfono</th>
+      <th>Rol</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% usuarios.forEach(u => { %>
+      <tr>
+        <td><%= u.id %></td>
+        <td><%= u.nombre %> <%= u.apellidos %></td>
+        <td><%= u.email %></td>
+        <td><%= u.telefono %></td>
+        <td><%= u.rol %></td>
+        <td>
+          <a href="/usuarios/<%= u.id %>/editar" class="btn btn-sm btn-warning"><i class='bx bx-edit'></i></a>
+          <a href="/usuarios/<%= u.id %>/cambiar-password" class="btn btn-sm btn-secondary"><i class='bx bx-key'></i></a>
+          <a href="/usuarios/<%= u.id %>/eliminar" class="btn btn-sm btn-danger btn-delete"><i class='bx bx-trash'></i></a>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

@@ -1,0 +1,128 @@
+Proyecto Inventario Módulo 2 - Guía para Aprender
+===============================================
+
+1. Estructura general
+---------------------
+src/       Código fuente de la aplicación.
+├── app.js            Arranque del servidor Express.
+├── config/db.js      Conexión a MySQL usando mysql2/promise.
+├── controllers/      Lógica de cada recurso.
+├── middlewares/      requireAuth y requireRole.
+├── routes/           Rutas agrupadas por recurso.
+├── utils/            Ayudas varias.
+├── validators/       Reglas con express-validator.
+├── views/            Plantillas EJS.
+└── public/           Archivos estáticos servidos como /resources.
+
+2. Archivos clave
+-----------------
+app.js
+  - Carga dotenv y módulos base.
+  - Configura EJS, layouts y sesiones.
+  - Middleware global: expone datos de sesión y `viewClass`.
+  - Define rutas principales y levanta el servidor.
+
+db.js
+  - Usa variables .env para crear un pool de conexiones.
+  - Exporta `pool` para hacer consultas con `await pool.query()`.
+
+routes/*.js
+  - Cada archivo registra rutas Express y enlaza controladores.
+  - Ejemplo: `productos.routes.js` asigna GET/POST a `productos.controller.js`.
+
+controllers/*.js
+  - Reciben la petición y responden con SQL seguro.
+  - Llaman a `res.render(vista, datos)` para enviar variables a la vista.
+  - Incluyen `viewClass` para aplicar fondos: panel, productos, bajo stock, usuarios, categorías, proveedores, localizaciones.
+
+validators/*.js
+  - Conjuntos de reglas para `express-validator`.
+  - Se ejecutan antes del controlador; si hay errores se renderiza de nuevo la vista con mensajes.
+
+views/layouts/layout.ejs
+  - Plantilla base con header y footer.
+  - `<main>` aplica `viewClass` para colorear el fondo de cada vista.
+
+views/partials/*
+  - `head.ejs` incluye metadatos extra.
+  - `header.ejs` navegación superior.
+  - `footer.ejs` scripts comunes.
+
+views/pages/*
+  - Vistas principales: `panel.ejs`, `productos/list.ejs`, `productos/bajoStock.ejs`, formularios, etc.
+  - Reciben datos desde el controlador para mostrarlos.
+  - El badge "Bajo stock" aparece si `stock < stock_minimo`.
+
+public/js/main.js
+  - Activa tooltips y popovers de Bootstrap.
+  - Muestra un popup informativo si se busca con números sin operador (usa SweetAlert2).
+  - Filtra en vivo las listas de categorías y proveedores en el formulario de producto.
+
+public/css/styles.css
+  - Variables de colores y estilos generales.
+  - Clases `.view-*` dan fondo distinto según `viewClass`.
+  - `badge-bajo-stock` resalta productos con poco stock.
+  - `.procedencia-cell` centra el botón de procedencia y `.options-grid` distribuye checkboxes en columnas.
+
+3. Flujo de una petición
+------------------------
+1. El usuario visita una ruta, por ejemplo `/productos`.
+2. La ruta correspondiente en `routes/productos.routes.js` invoca validadores y luego el controlador.
+3. El controlador consulta la base con parámetros sanitisados.
+4. Se llama a `res.render('pages/productos/list', {datos, viewClass: 'view-productos'})`.
+5. La vista EJS usa esos datos y `viewClass` llega al layout para aplicar el fondo.
+
+4. Librerías usadas
+-------------------
+- express: servidor web.
+- ejs + express-ejs-layouts: vistas con plantillas.
+- mysql2/promise: acceso a MySQL con async/await.
+- express-session: sesiones de usuario.
+- express-validator: validaciones de entrada.
+- dotenv: configuración por variables de entorno.
+- bcryptjs: hash de contraseñas.
+- Bootstrap 5, SweetAlert2 y Boxicons via CDN en las vistas.
+
+5. Seguridad aplicada
+---------------------
+- Variables de entorno cargadas con **dotenv** y validadas al inicio.
+- Contraseñas cifradas con **bcryptjs** y comparación vía `bcrypt.compare`.
+- Sesiones seguras con **express-session**: `httpOnly`, `sameSite:'lax'`, `secure` en producción y `maxAge` limitado.
+- Consultas SQL siempre parametrizadas usando `mysql2/promise`.
+- Vistas EJS escapadas con `<%= %>` para evitar XSS.
+- Middlewares `requireAuth` y `requireRole('admin')` protegen rutas y enlaces de administración.
+
+6. Comandos básicos
+-------------------
+`npm install`         Instala dependencias.
+`npm run dev`         Arranca el servidor en desarrollo.
+`npm start`           Arranca en producción.
+`npm audit --omit=dev`Audita dependencias de producción.
+
+Con esta guía deberías seguir el flujo de ruta → validador → controlador → SQL → vista y entender cómo se pasan datos a las plantillas.
+
+7. Extras visuales y ayuda
+--------------------------
+- En formularios de Productos y Bajo stock, si escribes un número sin elegir operador aparece un aviso de SweetAlert2. Solo se muestra una vez por campo y la búsqueda sigue usando '=' por defecto.
+- Los campos numéricos muestran primero el operador (select) y luego el número. Placeholders: "Precio/Stock/Stock mín." y "num".
+- Se eliminaron las formas y colores por bucket. Ahora los productos muestran una columna "Procedencia" con un popover que lista categorías y proveedores; si falta información se muestra "—".
+- En el formulario de producto, categorías y proveedores se presentan en un grid de varias columnas con un buscador en vivo. Para más columnas, ajusta las clases `row-cols-*` en la vista.
+- El script `public/js/main.js` inicializa tooltips, popovers, filtrado en vivo y confirma las eliminaciones.
+- En el panel de resumen, cada tarjeta es un enlace completo gracias a `a.stretched-link`.
+
+8. Cambios recientes (panel, login, procedencia)
+-----------------------------------------------
+- La tarjeta "Bajo stock" del panel ahora enlaza a `/bajo-stock` y hace toda la card clicable.
+- El formulario de login usa `oldInput` y `errors` para persistir el email tras fallos y lista mensajes de `express-validator`.
+- Un botón accesible permite mostrar u ocultar la contraseña sin recargar la página.
+- Se eliminó la sección "Procedencia" del detalle de producto porque ya se muestran categorías y proveedores directamente.
+- Comentarios clave están repartidos en `routes/`, `controllers/`, `validators/`, `middlewares/`, `views/` y `public/` para facilitar el aprendizaje.
+
+9. Diseño corporativo, logo y códigos QR
+---------------------------------------
+- `public/css/styles.css` define colores y márgenes propios sobre Bootstrap 5.
+- Navbar y login muestran un logo de ejemplo ubicado en `public/images/logo.svg`; basta sustituir ese archivo para personalizarlo.
+- El detalle de producto genera un **código QR** (librería `qrcode`) con datos básicos. Puede descargarse o imprimirse.
+- Las imágenes de productos se almacenan en `public/uploads/products` y se sirven desde la ruta `/uploads/products/...`.
+- El login limita a 5 intentos fallidos y bloquea el acceso durante 10 minutos.
+# [checklist] guía actualizada

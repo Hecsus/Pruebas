@@ -1,0 +1,38 @@
+<!--
+  Vista de formulario de login.
+  Propósito: permitir al usuario autenticarse.
+  Entradas: `errors` (objeto de errores) y `oldInput` (datos previos).
+  Salidas: formulario HTML.
+  Validaciones: errores de `express-validator` mostrados en lista.
+  Seguridad/UX: persistimos email y ofrecemos botón accesible para mostrar/ocultar contraseña sin repoblarla.
+-->
+<div class="text-center mb-4">
+  <img src="/resources/images/logo.svg" alt="Logo corporativo" class="mb-2" style="height:64px; width:auto;">
+  <h1>Login</h1>
+</div>
+<form action="/auth/login" method="POST" class="col-md-4 mx-auto">
+  <input type="hidden" name="returnTo" value="<%= returnTo || '' %>"><!-- Ruta interna a la que volver tras login -->
+  <div class="mb-3">
+    <label class="form-label">Email</label>
+    <input type="email" name="email" value="<%= (oldInput && oldInput.email) || '' %>" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Contraseña</label>
+    <!-- Campo de contraseña con botón mostrar/ocultar; no repoblamos por seguridad -->
+    <div class="input-group">
+      <input type="password" id="password" name="password" class="form-control" required>
+      <button type="button" class="btn btn-outline-secondary" data-toggle="password" data-target="#password" aria-pressed="false" aria-label="Mostrar contraseña">
+        <i class="bx bx-show" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+  <% if (errors) { %>
+    <div class="alert alert-danger">
+      <ul class="mb-0">
+        <% Object.values(errors).forEach(e => { %><li><%= e.msg %></li><% }) %>
+      </ul>
+    </div>
+  <% } %>
+  <button class="btn btn-primary">Ingresar</button>
+</form>
+<!-- [checklist] Requisito implementado | Validación aplicada | SQL parametrizado (si aplica) | Comentarios modo curso | Sin código muerto -->

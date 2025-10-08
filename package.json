@@ -1,0 +1,47 @@
+{
+  "name": "inventario-mod2",
+  "version": "1.0.0",
+  "description": "Inventario Módulo 2",
+  "private": true,
+  "engines": { "node": ">=18" },
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node src/app.js",
+    "clean:win": "powershell -ExecutionPolicy Bypass -File scripts/clean-install.ps1",
+    "audit:prod": "npm audit --omit=dev",
+    "ci:prod": "npm ci --omit=dev"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "ejs": "^3.1.10",
+    "express-ejs-layouts": "^2.5.1",
+    "mysql2": "^3.11.0",
+    "dotenv": "^16.4.5",
+    "express-session": "^1.18.0",
+    "express-validator": "^7.2.1",
+    "bcryptjs": "^2.4.3",
+    "multer": "^2.0.0",
+    "qrcode": "^1.5.3"
+  },
+  "overrides": {
+    "debug": "4.3.7",
+    "braces": "3.0.3",
+    "micromatch": "4.0.8",
+    "extglob": "2.0.5",
+    "nanomatch": "1.2.13",
+    "cross-spawn": "7.0.6",
+    "ansi-styles": "4.3.0",
+    "chalk": "4.1.2",
+    "color-convert": "2.0.1",
+    "color-name": "1.1.4",
+    "got": "11.8.6",
+    "supports-color": "8.1.1",
+    "strip-ansi": "6.0.1",
+    "ansi-regex": "5.0.1",
+    "string-width": "4.2.3",
+    "widest-line": "3.1.0",
+    "update-notifier": "6.0.2",
+    "boxen": "7.1.1"
+  }
+}

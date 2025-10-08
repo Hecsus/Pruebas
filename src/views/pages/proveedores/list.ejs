@@ -1,0 +1,53 @@
+<h1>Proveedores</h1>
+<a href="/proveedores/nuevo" class="btn btn-success mb-3">Nuevo</a>
+<button class="btn btn-outline-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#searchBox">Buscar</button>
+<div id="searchBox" class="collapse <%= (Object.keys(query||{}).length ? 'show' : '') %>">
+  <% if (errors && errors.length) { %>
+    <div class="alert alert-warning">
+      <strong>Revisa los filtros:</strong>
+      <ul class="mb-0">
+        <% errors.forEach(e => { %><li><%= e.path %>: <%= e.msg %></li><% }) %>
+      </ul>
+    </div>
+  <% } %>
+  <form class="row g-2 mb-3" method="get">
+    <div class="col-md-2">
+      <input type="number" name="id" class="form-control" placeholder="ID" value="<%= query.id || '' %>">
+    </div>
+    <div class="col-md-4">
+      <input type="text" name="nombre" class="form-control" placeholder="Nombre" value="<%= query.nombre || '' %>">
+    </div>
+    <div class="col-md-3">
+      <select name="sortBy" class="form-select">
+        <option value="id" <%= (query.sortBy || 'id') === 'id' ? 'selected' : '' %>>Ordenar por ID</option>
+        <option value="nombre" <%= query.sortBy === 'nombre' ? 'selected' : '' %>>Nombre</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <select name="sortDir" class="form-select">
+        <option value="asc" <%= (query.sortDir || 'asc') === 'asc' ? 'selected' : '' %>>Asc</option>
+        <option value="desc" <%= (query.sortDir || 'asc') === 'desc' ? 'selected' : '' %>>Desc</option>
+      </select>
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary">Aplicar</button>
+      <a href="/proveedores" class="btn btn-outline-secondary">Limpiar</a>
+    </div>
+  </form>
+</div>
+<table class="table table-striped">
+  <thead><tr><th>ID</th><th>Nombre</th><th>Acciones</th></tr></thead>
+  <tbody>
+    <% proveedores.forEach(p => { %>
+      <tr>
+        <td><%= p.id %></td>
+        <td><%= p.nombre %></td>
+        <td>
+          <a href="/proveedores/<%= p.id %>/editar" class="btn btn-sm btn-warning"><i class='bx bx-edit'></i></a>
+          <a href="/proveedores/<%= p.id %>/eliminar" class="btn btn-sm btn-danger btn-delete"><i class='bx bx-trash'></i></a>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+<!-- [checklist] permiso correcto, validaciones y sin código muerto -->

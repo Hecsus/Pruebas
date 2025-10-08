@@ -1,0 +1,44 @@
+<!--
+  Layout base para todas las vistas.
+  Propósito: estructura HTML común, carga de estilos y scripts globales.
+  Entradas: `title`, `flash`, `viewClass`, cuerpo de cada vista.
+  Salidas: HTML completo con mensajes flash y script principal.
+-->
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= title ? title + ' — ' : '' %>Inventario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"><!-- Bootstrap base -->
+    <%- include('../partials/head') %><!-- Librerías externas: Boxicons, SweetAlert2 -->
+    <link rel="icon" type="image/svg+xml" href="/resources/images/logo.svg"><!-- Favicon basado en el logo -->
+    <link rel="stylesheet" href="/resources/css/styles.css"><!-- Estilos propios -->
+  </head>
+  <body>
+    <% 
+      // _hideChrome toma el valor desde res.locals.hideChrome si está definido; si no, usa false como seguro
+      var _hideChrome = (typeof hideChrome === 'undefined') ? false : hideChrome; 
+    %>
+    <% if (!_hideChrome) { %>
+      <%- include('../partials/header') %><!-- Navbar superior reutilizable -->
+      <div class="navbar-spacer"></div><!-- Espaciador para evitar solapamiento con contenido -->
+    <% } %>
+    <main class="container <%= viewClass %>"><!-- Contenido principal: viewClass ya llega saneado desde res.locals -->
+      <%- body %>
+    </main>
+    <% if (!_hideChrome) { %><%- include('../partials/footer') %><% } %><!-- Pie opcional -->
+    <% if (flash) { %><!-- Mensajes flash con SweetAlert2 -->
+      <script>
+        Swal.fire({
+          icon: '<%= flash.type === "success" ? "success" : "error" %>',
+          title: '<%= flash.message %>',
+          timer: 2000,
+          showConfirmButton: false
+        });
+      </script>
+    <% } %>
+    <!-- Script global con comportamientos comunes (toggle contraseña, confirmaciones, etc.) -->
+    <script src="/resources/js/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,71 @@
+<!-- Resumen general del inventario -->
+<h1 class="mb-4">Resumen</h1>
+<div class="row g-3"><!-- Grid de tarjetas resumen -->
+  <!-- Cada tarjeta es un enlace completo con icono y contador -->
+  <div class="col-6 col-md-4 col-lg-2">
+    <a href="/productos" class="card card-summary bg-primary text-white text-center text-decoration-none">
+      <div class="card-body">
+        <i class="<%= icons.productos %> summary-icon"></i>
+        <p class="summary-value"><%= counts.productos %></p>
+        <p class="mb-0">Productos</p>
+      </div>
+    </a>
+  </div>
+  <div class="col-6 col-md-4 col-lg-2">
+    <a href="/categorias" class="card card-summary bg-success text-white text-center text-decoration-none">
+      <div class="card-body">
+        <i class="<%= icons.categorias %> summary-icon"></i>
+        <p class="summary-value"><%= counts.categorias %></p>
+        <p class="mb-0">Categorías</p>
+      </div>
+    </a>
+  </div>
+  <div class="col-6 col-md-4 col-lg-2">
+    <a href="/proveedores" class="card card-summary bg-warning text-white text-center text-decoration-none">
+      <div class="card-body">
+        <i class="<%= icons.proveedores %> summary-icon"></i>
+        <p class="summary-value"><%= counts.proveedores %></p>
+        <p class="mb-0">Proveedores</p>
+      </div>
+    </a>
+  </div>
+  <div class="col-6 col-md-4 col-lg-2">
+    <a href="/localizaciones" class="card card-summary bg-info text-white text-center text-decoration-none">
+      <div class="card-body">
+        <i class="<%= icons.localizaciones %> summary-icon"></i>
+        <p class="summary-value"><%= counts.localizaciones %></p>
+        <p class="mb-0">Localizaciones</p>
+      </div>
+    </a>
+  </div>
+  <div class="col-6 col-md-4 col-lg-2">
+    <a href="/bajo-stock" class="card card-summary bg-danger text-white text-center text-decoration-none">
+      <div class="card-body">
+        <i class="<%= icons.bajoStock %> summary-icon"></i>
+        <p class="summary-value"><%= counts.bajoStock %></p>
+        <p class="mb-0">Bajo stock</p>
+      </div>
+    </a>
+  </div>
+  <% if (isAdmin) { %>
+    <div class="col-6 col-md-4 col-lg-2">
+      <a href="/usuarios" class="card card-summary bg-secondary text-white text-center text-decoration-none">
+        <div class="card-body">
+          <i class="<%= icons.usuarios %> summary-icon"></i>
+          <p class="summary-value"><%= counts.usuarios %></p>
+          <p class="mb-0">Usuarios</p>
+        </div>
+      </a>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+      <a href="/usuarios" class="card card-summary bg-dark text-white text-center text-decoration-none">
+        <div class="card-body">
+          <i class="<%= icons.admins %> summary-icon"></i>
+          <p class="summary-value"><%= counts.admins %></p>
+          <p class="mb-0">Admins</p>
+        </div>
+      </a>
+    </div>
+  <% } %>
+</div>
+<!-- [checklist] panel bajo stock enlaza -->

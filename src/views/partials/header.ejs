@@ -1,0 +1,42 @@
+<header>
+  <!-- Barra de navegación principal -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark"><!-- Navbar principal -->
+    <div class="container-fluid">
+      <%# Brand con logo y nombre de la app; el texto puede reemplazarse %>
+      <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+        <img src="/resources/images/logo.svg" alt="Logo" />
+        <span class="fw-semibold">Inventario Módulo 2</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse nav-separated" id="navbarNav">
+        <%# activePath proviene de res.locals y resalta el enlace actual en la navbar %>
+        <% if (isAuthenticated) { %>
+          <div class="navbar-identity d-lg-none mb-2">👋 Hola, <strong><%= userName %></strong> (<%= userRole %>)</div>
+        <% } %>
+        <%# Menú principal: enlaces a secciones del inventario con activo visible %>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <% if (isAuthenticated) { %>
+            <li class="nav-item"><a class="nav-link ps-3 ms-3 <%= activePath.startsWith('/panel') ? 'active' : '' %>" href="/panel" <%= activePath.startsWith('/panel') ? 'aria-current=\"page\"' : '' %>>Inicio</a></li>
+            <li class="nav-item"><a class="nav-link ps-3 ms-3 <%= activePath.startsWith('/productos') ? 'active' : '' %>" href="/productos" <%= activePath.startsWith('/productos') ? 'aria-current=\"page\"' : '' %>>Productos</a></li>
+            <li class="nav-item"><a class="nav-link ps-3 ms-3 <%= activePath.startsWith('/bajo-stock') ? 'active' : '' %>" href="/bajo-stock" <%= activePath.startsWith('/bajo-stock') ? 'aria-current=\"page\"' : '' %>>Bajo stock</a></li>
+            <li class="nav-item"><a class="nav-link ps-3 ms-3 <%= activePath.startsWith('/categorias') ? 'active' : '' %>" href="/categorias" <%= activePath.startsWith('/categorias') ? 'aria-current=\"page\"' : '' %>>Categorías</a></li>
+            <li class="nav-item"><a class="nav-link ps-3 ms-3 <%= activePath.startsWith('/proveedores') ? 'active' : '' %>" href="/proveedores" <%= activePath.startsWith('/proveedores') ? 'aria-current=\"page\"' : '' %>>Proveedores</a></li>
+            <li class="nav-item"><a class="nav-link ps-3 ms-3 <%= activePath.startsWith('/localizaciones') ? 'active' : '' %>" href="/localizaciones" <%= activePath.startsWith('/localizaciones') ? 'aria-current=\"page\"' : '' %>>Localizaciones</a></li>
+            <% if (userRole === 'admin') { %>
+              <li class="nav-item"><a class="nav-link ps-3 ms-3 <%= activePath.startsWith('/usuarios') ? 'active' : '' %>" href="/usuarios" <%= activePath.startsWith('/usuarios') ? 'aria-current=\"page\"' : '' %>>Usuarios</a></li>
+            <% } %>
+          <% } %>
+        </ul>
+        <%# Acciones de sesión: saludo persistente y login/logout %>
+        <ul class="navbar-nav">
+          <% if (isAuthenticated) { %>
+            <li class="nav-item d-none d-lg-block"><span class="navbar-text me-3">👋 Hola, <strong><%= userName %></strong> (<%= userRole %>)</span></li>
+            <li class="nav-item"><a class="nav-link ps-3 ms-3" href="/auth/logout">Salir</a></li>
+          <% } else { %>
+            <li class="nav-item"><a class="nav-link ps-3 ms-3 <%= activePath === '/login' ? 'active' : '' %>" href="/login" <%= activePath === '/login' ? 'aria-current=\"page\"' : '' %>>Login</a></li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

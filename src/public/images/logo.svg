@@ -1,0 +1,5 @@
+<!-- Reemplazar por el logo de la empresa (mismo nombre o ajustar layout). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 32">
+  <rect width="120" height="32" fill="#0d6efd" rx="4"/>
+  <text x="60" y="21" font-size="16" text-anchor="middle" fill="#fff" font-family="Arial,Helvetica,sans-serif">IM2</text>
+</svg>

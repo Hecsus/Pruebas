@@ -1,0 +1,11 @@
+<h1><%= localizacion ? 'Editar' : 'Nueva' %> localización</h1>
+<form action="<%= localizacion ? '/localizaciones/' + localizacion.id + '/editar' : '/localizaciones/nuevo' %>" method="POST" class="col-md-4">
+  <div class="mb-3">
+    <label class="form-label">Nombre</label>
+    <input type="text" name="nombre" class="form-control" value="<%= localizacion ? localizacion.nombre : '' %>">
+  </div>
+  <% if (errors.length) { %>
+    <div class="alert alert-danger"><ul class="mb-0"><% errors.forEach(e => { %><li><%= e.msg %></li><% }) %></ul></div>
+  <% } %>
+  <button class="btn btn-primary">Guardar</button>
+</form>

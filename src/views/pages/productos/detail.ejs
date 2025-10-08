@@ -1,0 +1,40 @@
+<%# Detalle de producto con imagen y QR %>
+<div class="row g-4">
+  <div class="col-md-8"><%# Columna izquierda: texto con datos clave %>
+    <h1 class="mb-3"><%= producto.nombre %></h1>
+    <p><strong>Descripción:</strong> <%= producto.descripcion || '-' %></p>
+    <p><strong>Precio:</strong> <%= producto.precio %></p>
+    <p><strong>Costo:</strong> <%= producto.costo %></p>
+    <p><strong>Stock:</strong>
+      <span><%= producto.stock %></span>
+      <% if (isBajoStock) { %><i class="bx bx-error text-danger ms-2" aria-label="Bajo stock" title="Bajo stock"></i><% } %>
+    </p>
+    <p><strong>Stock mín.:</strong> <%= producto.stock_minimo %></p>
+    <% const cats = producto.categorias.length ? producto.categorias.map(c=>c.nombre).join(', ') : '—';
+       const provs = producto.proveedores.length ? producto.proveedores.map(p=>p.nombre).join(', ') : '—'; %>
+    <p><strong>Categorías:</strong> <%= cats %></p>
+    <p><strong>Proveedores:</strong> <%= provs %></p>
+    <p><strong>Localización:</strong> <%= producto.localizacion || '-' %></p>
+    <% if (producto.observaciones) { %>
+      <p><strong>Observaciones:</strong> <%= producto.observaciones %></p>
+    <% } %>
+    <a href="<%= returnTo || '/productos' %>" class="btn btn-secondary mt-3">Volver</a>
+  </div>
+  <div class="col-md-4 d-flex flex-column align-items-center gap-3"><%# Columna derecha: imagen y QR %>
+    <% if (imageUrl) { %>
+      <img src="<%= imageUrl %>" alt="Imagen de <%= producto.nombre %>" class="img-fluid product-media w-100">
+    <% } else { %>
+      <div class="placeholder-img d-flex align-items-center justify-content-center p-4 w-100">
+        <i class="bx bx-image-alt fs-1 me-2" aria-hidden="true"></i> <span>Sin imagen</span>
+      </div>
+    <% } %>
+    <div class="qr-card p-3 text-center w-100">
+      <img class="qr-img mb-2" src="<%= qrDataUrl %>" alt="QR del producto">
+      <div class="d-flex flex-column gap-2">
+        <a class="btn btn-outline-primary btn-sm" href="/productos/<%= producto.id %>/qr" target="_blank">Imprimir QR</a>
+        <a class="btn btn-outline-secondary btn-sm" href="<%= qrDataUrl %>" download="producto-<%= producto.id %>-qr.png">Descargar QR</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- [checklist] Requisito implementado | Validación aplicada | SQL parametrizado (si aplica) | Comentarios modo curso | Sin código muerto -->

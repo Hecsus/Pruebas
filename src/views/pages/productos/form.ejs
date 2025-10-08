@@ -1,0 +1,96 @@
+<%# Formulario de producto con checkboxes multicolumna y buscador en categorías/proveedores %>
+<h1><%= producto ? 'Editar' : 'Nuevo' %> producto</h1>
+<form action="<%= producto ? '/productos/' + producto.id + '/editar' : '/productos/nuevo' %>" method="POST" enctype="multipart/form-data">
+  <input type="hidden" name="returnTo" value="<%= returnTo || '' %>">
+  <div class="mb-3">
+    <label class="form-label">Nombre</label>
+    <input type="text" name="nombre" class="form-control" value="<%= oldInput?.nombre || producto?.nombre || '' %>">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Descripción</label>
+    <textarea name="descripcion" class="form-control"><%= oldInput?.descripcion || producto?.descripcion || '' %></textarea>
+  </div>
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Precio</label>
+      <input type="number" step="0.01" name="precio" class="form-control" value="<%= oldInput?.precio || producto?.precio || '' %>">
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Costo</label>
+      <input type="number" step="0.01" name="costo" class="form-control" value="<%= oldInput?.costo || producto?.costo || '' %>">
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Stock</label>
+      <input type="number" name="stock" class="form-control" value="<%= oldInput?.stock || producto?.stock || '' %>">
+      <div class="form-text">Cantidad actual disponible</div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Stock mínimo</label>
+      <input type="number" name="stock_minimo" class="form-control" value="<%= oldInput?.stock_minimo || producto?.stock_minimo || '' %>">
+      <div class="form-text">Umbral mínimo antes de reponer</div>
+    </div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Observaciones</label>
+    <textarea name="observaciones" class="form-control" maxlength="1000"><%= oldInput?.observaciones || producto?.observaciones || '' %></textarea>
+  </div>
+  <%# Campo de imagen (opcional, 3MB, valida formatos) %>
+  <div class="mb-3">
+    <label class="form-label">Imagen</label>
+    <input type="file" name="imagen" accept=".jpg,.jpeg,.png,.webp" class="form-control">
+    <small class="text-muted">Opcional. Máx 3MB. Formatos: JPG, PNG o WEBP.</small>
+    <% if (producto?.imageUrl) { %><div class="form-text">Se reemplazará si subes otra.</div><% } %>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Localización</label>
+    <select name="localizacion_id" class="form-select">
+      <option value="">Seleccione...</option>
+      <% localizaciones.forEach(l => { %>
+        <option value="<%= l.id %>" <%= (oldInput?.localizacion_id==l.id || producto?.localizacion_id==l.id) ? 'selected' : '' %>><%= l.nombre %></option>
+      <% }) %>
+    </select>
+  </div>
+  <!-- Categorías: buscador y grid multicolumna -->
+  <div class="mb-3">
+    <div class="d-flex align-items-center justify-content-between">
+      <h6 class="mb-0">Categorías</h6>
+      <input type="search" class="form-control form-control-sm w-auto" placeholder="Buscar categoría…" data-filter="categorias">
+    </div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-2 options-grid" data-options="categorias"><!-- Ajustar row-cols-* para más columnas -->
+      <% categorias.forEach(c => { %>
+        <div class="col">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="categoriaIds" value="<%= c.id %>" id="cat_<%= c.id %>" <%= ((producto?.categoriaIds || []).includes(c.id) || (oldInput && (Array.isArray(oldInput.categoriaIds) ? oldInput.categoriaIds : [oldInput.categoriaIds]).includes(String(c.id)))) ? 'checked' : '' %>>
+            <label class="form-check-label" for="cat_<%= c.id %>"><%= c.nombre %></label>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+  <!-- Proveedores: buscador y grid multicolumna -->
+  <div class="mb-3">
+    <div class="d-flex align-items-center justify-content-between">
+      <h6 class="mb-0">Proveedores</h6>
+      <input type="search" class="form-control form-control-sm w-auto" placeholder="Buscar proveedor…" data-filter="proveedores">
+    </div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-2 options-grid" data-options="proveedores"><!-- Ajustar row-cols-* para más columnas -->
+      <% proveedores.forEach(p => { %>
+        <div class="col">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="proveedorIds" value="<%= p.id %>" id="prov_<%= p.id %>" <%= ((producto?.proveedorIds || []).includes(p.id) || (oldInput && (Array.isArray(oldInput.proveedorIds) ? oldInput.proveedorIds : [oldInput.proveedorIds]).includes(String(p.id)))) ? 'checked' : '' %>>
+            <label class="form-check-label" for="prov_<%= p.id %>"><%= p.nombre %></label>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+  <% if (errors.length) { %>
+    <div class="alert alert-danger">
+      <ul class="mb-0">
+        <% errors.forEach(e => { %><li><%= e.msg %></li><% }) %>
+      </ul>
+    </div>
+  <% } %>
+  <button class="btn btn-primary">Guardar</button>
+</form>
+<!-- [checklist] Requisito implementado | Validación aplicada | SQL parametrizado (si aplica) | Comentarios modo curso | Sin código muerto -->

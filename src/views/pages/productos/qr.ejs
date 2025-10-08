@@ -1,0 +1,9 @@
+<%# Página imprimible con QR del producto %>
+<div class="qr-print text-center">
+  <h1 class="h5 mb-3"><%= producto.nombre %> (#<%= producto.id %>)</h1>
+  <img src="<%= qrDataUrl %>" alt="QR de <%= producto.nombre %>" class="qr-img mb-3">
+  <p class="mb-1"><strong>Precio:</strong> <%= producto.precio %></p>
+  <p class="mb-3"><strong>Stock:</strong> <%= producto.stock %></p>
+  <button class="btn btn-primary no-print" onclick="window.print()">Imprimir</button>
+</div>
+<!-- [checklist] Requisito implementado | Validación aplicada | SQL parametrizado (si aplica) | Comentarios modo curso | Sin código muerto -->

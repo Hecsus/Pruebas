@@ -1,0 +1,52 @@
+Proyecto de inventario – Guía rápida para estudiantes
+=====================================================
+
+Estructura principal
+--------------------
+- **src/app.js**: inicia Express, configura middlewares, sesiones y rutas.
+- **src/config/db.js**: crea un pool de conexiones MySQL.
+- **src/controllers/**: lógica de cada sección (productos, categorías, auth...).
+- **src/routes/**: asocia URL con controladores.
+- **src/middlewares/**: funciones intermedias como `requireAuth` y `requireRole`.
+- **src/utils/**: ayudas como subida de imágenes (`upload.js`) o generación de QR (`qrcode.js`).
+- **src/validators/**: reglas de `express-validator` para formularios.
+- **src/views/**: plantillas EJS. `layouts/` define el marco común, `partials/` piezas reutilizables y `pages/` las vistas específicas.
+- **src/public/**: archivos estáticos servidos al navegador.
+  - `css/styles.css`: capa visual corporativa sobre Bootstrap.
+  - `images/logo.svg`: logotipo de ejemplo; reemplázalo por el de tu empresa.
+  - `uploads/products/`: aquí se guardan las fotos de los productos.
+
+Flujo básico de una petición
+---------------------------
+1. El navegador solicita una ruta (ej. `/productos`).
+2. `app.js` aplica middlewares globales y pasa la petición a la ruta correspondiente.
+3. En `routes/` se llama al controlador adecuado en `controllers/`.
+4. El controlador usa `mysql2` para consultar la base de datos y prepara los datos.
+5. Se renderiza una vista EJS con esos datos y se envía HTML al navegador.
+
+Librerías clave
+---------------
+- **express**: servidor web.
+- **ejs** y **express-ejs-layouts**: motor de vistas.
+- **mysql2**: conexión a MySQL.
+- **express-session**: manejo de sesiones.
+- **bcryptjs**: hash de contraseñas.
+- **express-validator**: validación de formularios.
+- **multer**: subida de imágenes.
+- **qrcode**: generación de códigos QR en productos.
+
+Comandos habituales
+-------------------
+```bash
+npm install      # instala dependencias
+npm run dev      # arranca en desarrollo
+npm start        # arranca en producción
+npm run audit:prod   # auditoría de dependencias
+```
+
+Notas de seguridad
+------------------
+- Las contraseñas se almacenan con hash (`bcryptjs`).
+- Las sesiones expiran en 1h y usan un `secret` desde `.env`.
+- Tras 5 intentos fallidos de login el usuario se bloquea 10 minutos.
+- `returnTo` valida que solo se redirija a rutas internas.

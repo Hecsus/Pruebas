@@ -1,0 +1,27 @@
+Guía de aprendizaje
+===================
+
+Contraseñas y seguridad
+-----------------------
+- En vistas de login y usuarios no se repobla la contraseña tras un error para evitar exponerla.
+- El valor se deja vacío y se ofrece un botón con `data-toggle="password"` para mostrar u ocultar el campo.
+
+Checkboxes como arrays
+----------------------
+- Las categorías y proveedores de productos llegan como `categoriaIds` y `proveedorIds`.
+- Si el usuario marca varias opciones Express entrega un array; con una sola marca llega un string.
+- El controlador normaliza: `Array.isArray(ids) ? ids : (ids ? [ids] : [])` y recorre para insertar filas en las tablas puente.
+
+Transacción en update de producto
+---------------------------------
+- La edición se realiza dentro de `beginTransaction`/`commit`.
+- Se actualiza la fila principal y luego se borran las relaciones en `producto_categoria` y `producto_proveedor`.
+- Se insertan nuevamente con bucles parametrizados; ante cualquier fallo se hace `rollback`.
+
+Doble validación y toggles
+--------------------------
+- Alta de usuarios y cambio de contraseña exigen confirmar email y contraseña (mínimo 8 caracteres).
+- Los dos campos de contraseña tienen toggles reutilizables.
+- En errores, los campos quedan vacíos para no filtrar datos sensibles.
+
+<!-- [checklist] Requisito implementado | Validación aplicada | SQL parametrizado (si aplica) | Comentarios modo curso | Sin código muerto -->
