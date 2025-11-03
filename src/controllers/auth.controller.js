@@ -88,8 +88,14 @@ exports.login = async (req, res) => {
  * Manejo de errores: ignora errores al destruir la sesión.
  */
 exports.logout = (req, res) => {
-  req.session.destroy(() => {          // Al destruir la sesión
-    res.redirect('/login');            // Redirige al formulario de login
-  });
+  if (typeof req.session?.destroy === 'function') { // express-session en desarrollo
+    req.session.destroy(() => {
+      res.redirect('/login');
+    });
+    return;
+  }
+
+  req.session = null;                 // cookie-session en producción se limpia asignando null
+  res.redirect('/login');
 };
 // [checklist] Requisito implementado | Validación aplicada | SQL parametrizado (si aplica) | Comentarios modo curso | Sin código muerto

@@ -72,21 +72,12 @@ Aplicación de gestión de inventario pensada para prácticas del módulo 2. Inc
 - **src/validators/**: validaciones de formularios.
 - **src/views/**: layouts, parciales y páginas en EJS.
 
-## Instalación y ejecución
+## Guía rápida
 1. Clona el repositorio.
 2. Copia `.env.example` a `.env` y completa los valores.
-3. Instala dependencias:
-   ```bash
-   npm install
-   ```
-4. Arranque en desarrollo:
-   ```bash
-   npm run dev
-   ```
-5. Arranque en producción:
-   ```bash
-   npm start
-   ```
+3. Importa el SQL de `db/` en tu servidor MySQL local.
+4. Instala dependencias con `npm install`.
+5. Arranca el proyecto en local con `npm start`.
 
 ## Variables de entorno
 ```
@@ -96,17 +87,20 @@ DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=
 DB_NAME=inventario
+NODE_ENV=development
 ```
 > Si usas XAMPP, el usuario suele ser `root` sin contraseña.
 
-## Rutas rápidas de verificación
-- `/` → redirige al panel (requiere sesión)
-- `/login`
-- `/health`
-- `/productos`
-- `/bajo-stock`
-- `/db-health`
-- `/resources` para archivos estáticos
+## Despliegue (Clever Cloud y Render)
+- Configura las variables en la plataforma: `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `SESSION_SECRET` y `NODE_ENV=production`.
+- No establezcas `PORT`; ambas plataformas lo inyectan automáticamente.
+- Recuerda que `/uploads` usa almacenamiento local efímero en Render/Clever. Para producción real migra a un servicio duradero como Amazon S3 o Cloudinary.
+
+## Rutas de verificación
+- `/health` → healthcheck simple `{ ok: true }`.
+- `/db-health` → comprueba conectividad MySQL.
+- `/login` → formulario de autenticación.
+- `/productos` → listado para validar vistas tras el login.
 
 ## Subida de imágenes
 - Directorio público: `/uploads/products/`
