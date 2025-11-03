@@ -1,9 +1,7 @@
-require('dotenv').config(); // Carga variables de entorno para obtener credenciales de la base de datos
-
 const required = ['DB_HOST', 'DB_USER', 'DB_PASSWORD', 'DB_NAME']; // Variables obligatorias para conectar
-for (const k of required) { // Recorre la lista de claves esperadas
-  if (process.env[k] === undefined) { // Si falta alguna variable
-    throw new Error(`[Config] Falta variable de entorno: ${k}. Crea .env en la raíz y rellénala.`); // Interrumpe la ejecución para evitar configuraciones erróneas
+for (const k of required) {
+  if (process.env[k] === undefined) { // Permite cadenas vacías (ej: DB_PASSWORD '')
+    throw new Error(`[Config] Falta variable de entorno: ${k}. Define las variables antes de iniciar el servidor.`);
   }
 }
 
@@ -26,7 +24,9 @@ const pool = mysql.createPool({ // Crea un pool de conexiones reutilizable
     console.log('DB OK'); // Mensaje informativo de éxito
     conn.release(); // Libera la conexión de vuelta al pool
   } catch (err) {
-    console.error('Error al conectar con la base de datos:', err.message); // Informa en consola si hay fallo
+    console.error('[DB] No se pudo establecer la conexión inicial. Verifica credenciales/host.');
+    console.error(`[DB] Detalle: ${err.message}`);
+    process.exit(1);
   }
 })();
 
